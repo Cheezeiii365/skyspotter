@@ -1,0 +1,135 @@
+/* Page Frame */
+.page-frame {
+  max-width: 1400px;
+  margin: 24px auto;
+  background: #111;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  min-height: calc(100vh - 48px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 36px;
+  height: 60px;
+  flex-shrink: 0;
+  background: #0A0A0A;
+  border-bottom: 1px solid #222;
+}
+
+.header-logo {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #00FFCC;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.header-status {
+  font-size: 12px;
+  font-weight: 700;
+  color: #00FF7F;
+  letter-spacing: 1px;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.volume-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: #666;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.volume-icon:hover {
+  color: #fff;
+}
+
+.volume-icon.muted svg path:last-child,
+.volume-icon.muted svg path:nth-child(2) {
+  display: none;
+}
+
+/* Hero */
+.hero {
+  text-align: center;
+  padding: 40px 24px 32px;
+  flex-shrink: 0;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+  max-width: 650px;
+  margin: 0 auto 14px;
+  color: #F5F5F5;
+}
+
+.hero .subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-cta button {
+  padding: 12px 28px;
+  background: #00FFCC;
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.hero-cta button:hover {
+  background: #00DDAA;
+}
+
+/* Board Section */
+.board-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0 24px 32px;
+}
+
+/* Fullscreen: hide header+hero, board fills viewport */
+.fullscreen-active .header,
+.fullscreen-active .hero {
+  display: none;
+}
+
+.fullscreen-active .board-section {
+  padding: 0;
+  height: 100vh;
+  align-items: center;
+}
