@@ -33,8 +33,28 @@ export class Tile {
   setChar(char) {
     this.currentChar = char;
     this.frontSpan.textContent = char === ' ' ? '' : char;
+    this._clearLogo();
     this.backSpan.textContent = '';
     this.frontEl.style.backgroundColor = '';
+  }
+
+  _clearLogo() {
+    if (this._logoImg) {
+      this._logoImg.remove();
+      this._logoImg = null;
+    }
+  }
+
+  _showLogo(url) {
+    this._clearLogo();
+    const img = document.createElement('img');
+    img.className = 'tile-logo';
+    img.src = url;
+    img.alt = '';
+    img.draggable = false;
+    this.frontEl.appendChild(img);
+    this._logoImg = img;
+    this.frontSpan.textContent = '';
   }
 
   scrambleTo(targetChar, delay) {
@@ -81,7 +101,12 @@ export class Tile {
 
           // Set the final character directly (skip 3D flip for reliability)
           // Use a brief opacity flash to simulate the flip settle
-          this.frontSpan.textContent = targetChar === ' ' ? '' : targetChar;
+          if (typeof targetChar === 'string' && targetChar.startsWith('http')) {
+            this._showLogo(targetChar);
+          } else {
+            this._clearLogo();
+            this.frontSpan.textContent = targetChar === ' ' ? '' : targetChar;
+          }
 
           // Quick flash effect: brief scale transform
           this.innerEl.style.transition = `transform ${FLIP_DURATION}ms ease-in-out`;

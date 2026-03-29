@@ -101,6 +101,17 @@
   }
 }
 
+/* Airline logo in tile */
+.tile-logo {
+  position: absolute;
+  inset: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  object-fit: contain;
+  border-radius: 2px;
+  pointer-events: none;
+}
+
 /* GPU compositing hint during animation only */
 .tile-inner.flipping,
 .tile.scrambling .tile-inner {

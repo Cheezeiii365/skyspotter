@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#111111">
-  <title>SkySpotter — Live Flight Tracker Split-Flap Display</title>
+  <title>SkySpotter</title>
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/board.css">
@@ -12,37 +12,16 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-
   <div class="page-frame">
-    <!-- Header -->
-    <header class="header">
-      <div class="header-logo">SkySpotter</div>
-      <nav class="header-nav">
-        <span class="header-status" id="status-text">LIVE</span>
-        <button class="volume-icon" id="volume-btn" title="Toggle sound">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-        </button>
-      </nav>
-    </header>
-
-    <!-- Hero -->
-    <section class="hero">
-      <h1>Live flights on a retro split-flap board.</h1>
-      <p class="subtitle">Real-time aircraft tracking via OpenSky Network. No hardware required.</p>
-      <div class="hero-cta">
-        <button id="fullscreen-btn">Go Fullscreen</button>
-      </div>
-    </section>
-
-    <!-- Board -->
-    <section class="board-section" id="board-container">
-    </section>
+    <section class="board-section" id="board-container"></section>
   </div>
-
+  <button class="volume-icon" id="volume-btn" title="Toggle sound (M)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+  </button>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

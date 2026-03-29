@@ -3,10 +3,12 @@ import {
   OPENSKY_API, DEFAULT_LAT, DEFAULT_LON, DEFAULT_RANGE,
   HEADER_ROW
 } from './constants.js';
+import { getAirlineLogo } from './airlines.js';
 
 export class FlightPoller {
-  constructor(board) {
+  constructor(board, routeCache) {
     this.board = board;
+    this._routeCache = routeCache;
     this._timer = null;
     this._paused = false;
     this._flights = [];
@@ -21,6 +23,11 @@ export class FlightPoller {
 
     // Number of flight rows (rows minus header and title)
     this._flightRows = GRID_ROWS - 2;
+
+    // Re-render when route data arrives asynchronously
+    if (this._routeCache) {
+      this._routeCache.onUpdate(() => this._render());
+    }
   }
 
   start() {
@@ -88,6 +95,12 @@ export class FlightPoller {
       const data = await resp.json();
       this._flights = this._parseFlights(data);
       this._lastFetch = Date.now();
+
+      // Kick off background origin lookups for new aircraft
+      if (this._routeCache) {
+        this._routeCache.fetchOrigins(this._flights.map(f => f.icao24));
+      }
+
       this._render();
     } catch (err) {
       console.warn('Flight poll failed:', err);
@@ -103,6 +116,7 @@ export class FlightPoller {
 
     return data.states
       .map(s => ({
+        icao24: (s[0] || '').trim(),
         callsign: (s[1] || '').trim(),
         origin: s[2] || '',
         altitude: s[7] != null ? Math.round(s[7] * 3.281) : null, // meters -> feet
@@ -127,30 +141,49 @@ export class FlightPoller {
     const titlePad = GRID_COLS - locationName.length - countStr.length;
     lines.push(locationName + ' '.repeat(Math.max(1, titlePad)) + countStr);
 
-    // Row 1: Column headers
-    lines.push(HEADER_ROW);
+    // Row 1: Column headers (shifted right by 1 for logo column)
+    lines.push(' ' + HEADER_ROW);
 
-    // Rows 2+: Flight data
+    // Rows 2+: Flight data (shifted right by 1)
     const start = page * this._flightRows;
     const pageFlights = this._flights.slice(start, start + this._flightRows);
+    const logos = {};
+
+    for (let i = 0; i < pageFlights.length; i++) {
+      // Attach departure airport if available
+      if (this._routeCache) {
+        pageFlights[i].fromAirport = this._routeCache.getOrigin(pageFlights[i].icao24);
+      }
+    }
 
     for (let i = 0; i < this._flightRows; i++) {
       if (i < pageFlights.length) {
-        lines.push(this._formatFlight(pageFlights[i]));
+        lines.push(' ' + this._formatFlight(pageFlights[i]));
+        const logo = getAirlineLogo(pageFlights[i].callsign);
+        if (logo) logos[i + 2] = logo;
       } else {
         lines.push('');
       }
     }
 
-    this.board.displayMessage(lines);
+    this.board.displayMessage(lines, logos);
   }
 
   _formatFlight(f) {
     const call = (f.callsign || '------').padEnd(8).slice(0, 8);
     const alt = f.altitude != null ? String(f.altitude).padStart(6) : '  ----';
     const spd = f.speed != null ? String(f.speed).padStart(4) : ' ---';
-    const hdg = f.heading != null ? String(f.heading).padStart(3).padEnd(3) + '\u00B0' : '---\u00B0';
-    return `${call}${alt}  ${spd}  ${hdg}`;
+
+    let from;
+    if (f.fromAirport === undefined) {
+      from = ' ...';  // still loading
+    } else if (f.fromAirport) {
+      from = f.fromAirport.padEnd(4).slice(0, 4);
+    } else {
+      from = ' -- ';  // not found
+    }
+
+    return `${call}${alt}  ${spd}  ${from}`;
   }
 
   _getLocationName() {

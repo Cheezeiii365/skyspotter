@@ -2,12 +2,15 @@ import { Board } from './Board.js';
 import { SoundEngine } from './SoundEngine.js';
 import { FlightPoller } from './FlightPoller.js';
 import { KeyboardController } from './KeyboardController.js';
+import { RouteCache } from './RouteCache.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const boardContainer = document.getElementById('board-container');
   const soundEngine = new SoundEngine();
   const board = new Board(boardContainer, soundEngine);
-  const poller = new FlightPoller(board);
+
+  const routeCache = new RouteCache();
+  const poller = new FlightPoller(board, routeCache);
   const keyboard = new KeyboardController(poller, soundEngine);
 
   // Initialize audio on first user interaction (browser autoplay policy)

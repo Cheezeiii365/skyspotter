@@ -94,11 +94,11 @@ export class Board {
     });
   }
 
-  displayMessage(lines) {
+  displayMessage(lines, logos = {}) {
     if (this.isTransitioning) return;
     this.isTransitioning = true;
 
-    const newGrid = this._formatToGrid(lines);
+    const newGrid = this._formatToGrid(lines, logos);
 
     let hasChanges = false;
 
@@ -129,13 +129,17 @@ export class Board {
     }, TOTAL_TRANSITION + 200);
   }
 
-  _formatToGrid(lines) {
+  _formatToGrid(lines, logos = {}) {
     const grid = [];
     for (let r = 0; r < this.rows; r++) {
       const line = (lines[r] || '').toUpperCase();
-      // Left-align flight data (no centering — this is a data board)
       const padded = line.padEnd(this.cols).slice(0, this.cols);
-      grid.push(padded.split(''));
+      const row = padded.split('');
+      // Inject logo emoji at column 0 for flagged rows
+      if (logos[r]) {
+        row[0] = logos[r];
+      }
+      grid.push(row);
     }
     return grid;
   }

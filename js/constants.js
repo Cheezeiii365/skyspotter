@@ -32,8 +32,8 @@ export const DEFAULT_LAT = 40.77;
 export const DEFAULT_LON = -73.87;
 export const DEFAULT_RANGE = 0.08; // degrees (~5 miles)
 
-// OpenSky Network API
-export const OPENSKY_API = 'https://opensky-network.org/api/states/all';
+// Flight states API (proxied through server.js with auth)
+export const OPENSKY_API = '/api/states';
 
 // Header row for the board
-export const HEADER_ROW = 'CALL    ALT    SPD  HDG  ';
+export const HEADER_ROW = 'CALL       ALT   SPD  FROM';

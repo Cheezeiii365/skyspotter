@@ -1,0 +1,10 @@
+{
+  "formatOnSave": false,
+  "filesExclude": {
+    "node_modules": true,
+    ".git": true,
+    ".DS_Store": true
+  },
+  "tabSize": 2,
+  "insertSpaces": true
+}

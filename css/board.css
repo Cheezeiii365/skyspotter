@@ -1,7 +1,13 @@
 /* Board Container */
 .board {
-  --tile-size: clamp(32px, 3.5vw, 56px);
-  --tile-gap: clamp(3px, 0.3vw, 5px);
+  --tile-gap: 4px;
+  /* Size tiles to fit within the viewport: min of width-constrained and height-constrained */
+  /* H overhead: board padding (96px) + page padding (48px) + 29 gaps (116px) = 260px        */
+  /* V overhead: board padding (68px) + page padding (48px) + 8 gaps (32px) = 148px          */
+  --tile-size: min(
+    calc((100vw - 260px) / 30),
+    calc((100vh - 148px) / 9)
+  );
 
   position: relative;
   background: #1A1A1A;
